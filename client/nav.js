@@ -1,10 +1,17 @@
 (function(){
   'use strict';
   angular.module('yummy')
-  .controller('NavCtrl', ['$scope', function($scope){
+  .controller('NavCtrl', ['$scope', '$localForage', function($scope, $localForage){
+    $localForage.getItem('email').then(function(email){
+      $scope.email = email;
+    });
     $scope.$on('authenticated', function(event, email){
       if(email === 'anonymous'){email = null;}
-      $scope.email = email;
+
+      $localForage.setItem('email', email).then(function(){
+        $scope.email = email;
+      });
+
     });
   }]);
 
